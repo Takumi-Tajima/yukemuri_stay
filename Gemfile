@@ -24,6 +24,7 @@ group :development do
   gem 'bullet'
   gem 'capybara'
   gem 'html2haml'
+  gem 'letter_opener_web'
   gem 'selenium-webdriver'
   gem 'web-console'
 end
