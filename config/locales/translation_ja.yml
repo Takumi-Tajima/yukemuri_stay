@@ -1,0 +1,12 @@
+ja:
+  activerecord:
+    attributes:
+      administrator:
+        email: メールアドレス
+        name: 名前
+        password: パスワード
+        remember_me: ログインを記憶する
+  general:
+    logout: ログアウト
+  confirm:
+    log_out_confirm: 本当にログアウトしますか？
