@@ -1,3 +1,18 @@
+GIT
+  remote: https://github.com/SonicGarden/sgcop.git
+  revision: 2c641799ac60d231a5237657e0bbae3dd01b31ab
+  branch: main
+  specs:
+    sgcop (1.24.5)
+      rubocop (~> 1.81.1)
+      rubocop-capybara (~> 2.22.0)
+      rubocop-factory_bot (~> 2.27.0)
+      rubocop-performance (~> 1.26.0)
+      rubocop-rails (~> 2.33.3)
+      rubocop-rake (~> 0.7.1)
+      rubocop-rspec (~> 3.7.0)
+      rubocop-rspec_rails (~> 2.31.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -72,6 +87,9 @@ GEM
       securerandom (>= 0.3)
       tzinfo (~> 2.0, >= 2.0.5)
       uri (>= 0.13.1)
+    addressable (2.8.7)
+      public_suffix (>= 2.0.2, < 7.0)
+    ast (2.4.3)
     base64 (0.3.0)
     benchmark (0.5.0)
     bigdecimal (3.3.1)
@@ -79,17 +97,56 @@ GEM
     bootsnap (1.18.6)
       msgpack (~> 1.2)
     builder (3.3.0)
+    bullet (8.1.0)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.11)
+    capybara (3.40.0)
+      addressable
+      matrix
+      mini_mime (>= 0.1.3)
+      nokogiri (~> 1.11)
+      rack (>= 1.6.0)
+      rack-test (>= 0.6.3)
+      regexp_parser (>= 1.5, < 3.0)
+      xpath (~> 3.2)
     concurrent-ruby (1.3.5)
     connection_pool (2.5.4)
     crass (1.0.6)
     cssbundling-rails (1.4.3)
       railties (>= 6.0.0)
     date (3.4.1)
+    diff-lcs (1.6.2)
     drb (2.2.3)
     erb (5.1.1)
     erubi (1.13.1)
+    erubis (2.7.0)
+    factory_bot (6.5.6)
+      activesupport (>= 6.1.0)
+    factory_bot_rails (6.5.1)
+      factory_bot (~> 6.5)
+      railties (>= 6.1.0)
     globalid (1.3.0)
       activesupport (>= 6.1)
+    haml (6.3.0)
+      temple (>= 0.8.2)
+      thor
+      tilt
+    haml-rails (3.0.0)
+      actionpack (>= 5.1)
+      activesupport (>= 5.1)
+      haml (>= 4.0.6)
+      railties (>= 5.1)
+    haml_lint (0.66.0)
+      haml (>= 5.0)
+      parallel (~> 1.10)
+      rainbow
+      rubocop (>= 1.0)
+      sysexits (~> 1.1)
+    html2haml (2.3.0)
+      erubis (~> 2.7.0)
+      haml (>= 4.0)
+      nokogiri (>= 1.6.0)
+      ruby_parser (~> 3.5)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
     io-console (0.8.1)
@@ -99,6 +156,9 @@ GEM
       reline (>= 0.4.2)
     jsbundling-rails (1.3.1)
       railties (>= 6.0.0)
+    json (2.15.2)
+    language_server-protocol (3.17.0.5)
+    lint_roller (1.1.0)
     logger (1.7.0)
     loofah (2.24.1)
       crass (~> 1.0.2)
@@ -110,6 +170,7 @@ GEM
       net-pop
       net-smtp
     marcel (1.1.0)
+    matrix (0.4.3)
     mini_mime (1.1.5)
     minitest (5.26.0)
     msgpack (1.8.0)
@@ -139,6 +200,10 @@ GEM
       racc (~> 1.4)
     nokogiri (1.18.10-x86_64-linux-musl)
       racc (~> 1.4)
+    parallel (1.27.0)
+    parser (3.3.10.0)
+      ast (~> 2.4.1)
+      racc
     pg (1.6.2)
     pg (1.6.2-aarch64-linux)
     pg (1.6.2-aarch64-linux-musl)
@@ -149,6 +214,7 @@ GEM
     pp (0.6.3)
       prettyprint
     prettyprint (0.2.0)
+    prism (1.6.0)
     propshaft (1.3.1)
       actionpack (>= 7.0.0)
       activesupport (>= 7.0.0)
@@ -156,6 +222,7 @@ GEM
     psych (5.2.6)
       date
       stringio
+    public_suffix (6.0.2)
     puma (7.1.0)
       nio4r (~> 2.0)
     racc (1.8.1)
@@ -197,18 +264,96 @@ GEM
       thor (~> 1.0, >= 1.2.2)
       tsort (>= 0.2)
       zeitwerk (~> 2.6)
+    rainbow (3.1.1)
     rake (13.3.0)
     rdoc (6.15.0)
       erb
       psych (>= 4.0.0)
       tsort
+    regexp_parser (2.11.3)
     reline (0.6.2)
       io-console (~> 0.5)
+    rexml (3.4.4)
+    rspec-core (3.13.6)
+      rspec-support (~> 3.13.0)
+    rspec-expectations (3.13.5)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.13.0)
+    rspec-mocks (3.13.6)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.13.0)
+    rspec-rails (8.0.2)
+      actionpack (>= 7.2)
+      activesupport (>= 7.2)
+      railties (>= 7.2)
+      rspec-core (~> 3.13)
+      rspec-expectations (~> 3.13)
+      rspec-mocks (~> 3.13)
+      rspec-support (~> 3.13)
+    rspec-support (3.13.6)
+    rubocop (1.81.6)
+      json (~> 2.3)
+      language_server-protocol (~> 3.17.0.2)
+      lint_roller (~> 1.1.0)
+      parallel (~> 1.10)
+      parser (>= 3.3.0.2)
+      rainbow (>= 2.2.2, < 4.0)
+      regexp_parser (>= 2.9.3, < 3.0)
+      rubocop-ast (>= 1.47.1, < 2.0)
+      ruby-progressbar (~> 1.7)
+      unicode-display_width (>= 2.4.0, < 4.0)
+    rubocop-ast (1.47.1)
+      parser (>= 3.3.7.2)
+      prism (~> 1.4)
+    rubocop-capybara (2.22.1)
+      lint_roller (~> 1.1)
+      rubocop (~> 1.72, >= 1.72.1)
+    rubocop-factory_bot (2.27.1)
+      lint_roller (~> 1.1)
+      rubocop (~> 1.72, >= 1.72.1)
+    rubocop-performance (1.26.1)
+      lint_roller (~> 1.1)
+      rubocop (>= 1.75.0, < 2.0)
+      rubocop-ast (>= 1.47.1, < 2.0)
+    rubocop-rails (2.33.4)
+      activesupport (>= 4.2.0)
+      lint_roller (~> 1.1)
+      rack (>= 1.1)
+      rubocop (>= 1.75.0, < 2.0)
+      rubocop-ast (>= 1.44.0, < 2.0)
+    rubocop-rake (0.7.1)
+      lint_roller (~> 1.1)
+      rubocop (>= 1.72.1)
+    rubocop-rspec (3.7.0)
+      lint_roller (~> 1.1)
+      rubocop (~> 1.72, >= 1.72.1)
+    rubocop-rspec_rails (2.31.0)
+      lint_roller (~> 1.1)
+      rubocop (~> 1.72, >= 1.72.1)
+      rubocop-rspec (~> 3.5)
+    ruby-progressbar (1.13.0)
+    ruby_parser (3.21.1)
+      racc (~> 1.5)
+      sexp_processor (~> 4.16)
+    rubyzip (3.2.1)
     securerandom (0.4.1)
+    selenium-webdriver (4.38.0)
+      base64 (~> 0.2)
+      logger (~> 1.4)
+      rexml (~> 3.2, >= 3.2.5)
+      rubyzip (>= 1.2.2, < 4.0)
+      websocket (~> 1.0)
+    sexp_processor (4.17.4)
+    simple_form (5.4.0)
+      actionpack (>= 7.0)
+      activemodel (>= 7.0)
     stimulus-rails (1.3.4)
       railties (>= 6.0.0)
     stringio (3.1.7)
+    sysexits (1.2.0)
+    temple (0.10.4)
     thor (1.4.0)
+    tilt (2.6.1)
     timeout (0.4.3)
     tsort (0.2.0)
     turbo-rails (2.0.17)
@@ -216,6 +361,10 @@ GEM
       railties (>= 7.1.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    unicode-display_width (3.2.0)
+      unicode-emoji (~> 4.1)
+    unicode-emoji (4.1.0)
+    uniform_notifier (1.18.0)
     uri (1.0.4)
     useragent (0.16.11)
     web-console (4.2.1)
@@ -223,10 +372,13 @@ GEM
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
       railties (>= 6.0.0)
+    websocket (1.2.11)
     websocket-driver (0.8.0)
       base64
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
+    xpath (3.2.0)
+      nokogiri (~> 1.8)
     zeitwerk (2.7.3)
 
 PLATFORMS
@@ -243,12 +395,22 @@ PLATFORMS
 
 DEPENDENCIES
   bootsnap
+  bullet
+  capybara
   cssbundling-rails
+  factory_bot_rails
+  haml-rails
+  haml_lint
+  html2haml
   jsbundling-rails
   pg
   propshaft
   puma
   rails (~> 8.0.3)
+  rspec-rails
+  selenium-webdriver
+  sgcop!
+  simple_form
   stimulus-rails
   turbo-rails
   web-console
