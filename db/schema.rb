@@ -10,9 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_27_080011) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_28_011657) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "accommodations", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "prefecture", null: false
+    t.string "address", null: false
+    t.string "phone_number", null: false
+    t.string "accommodation_type", null: false
+    t.text "description", null: false
+    t.boolean "published", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name", "address"], name: "index_accommodations_on_name_and_address", unique: true
+    t.index ["published", "accommodation_type"], name: "index_accommodations_on_published_and_accommodation_type"
+    t.index ["published", "prefecture", "accommodation_type"], name: "idx_on_published_prefecture_accommodation_type_13cd666756"
+  end
 
   create_table "administrators", force: :cascade do |t|
     t.string "email", null: false

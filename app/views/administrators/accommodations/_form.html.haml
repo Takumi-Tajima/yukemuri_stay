@@ -1,0 +1,9 @@
+= simple_form_for([:administrators, accommodation]) do |f|
+  = f.input :name
+  = f.input :prefecture
+  = f.input :address
+  = f.input :phone_number
+  = f.input :accommodation_type
+  = f.input :description, as: :text, input_html: { rows: 5 }
+  = f.input :published, label: '公開する'
+  = f.button :submit, class: 'btn-primary'

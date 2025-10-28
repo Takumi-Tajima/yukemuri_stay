@@ -1,0 +1,18 @@
+%h1.fs-2.mb-3 宿泊施設一覧
+
+.mb-3= link_to t('general.create'), new_administrators_accommodation_path, class: 'btn btn-primary'
+
+%table.table
+  %thead
+    %tr
+      %th= Accommodation.human_attribute_name(:name)
+      %th= Accommodation.human_attribute_name(:prefecture)
+      %th= Accommodation.human_attribute_name(:accommodation_type)
+      %th= Accommodation.human_attribute_name(:published)
+  %tbody
+    - @accommodations.each do |accommodation|
+      %tr
+        %td= link_to accommodation.name, administrators_accommodation_path(accommodation)
+        %td= accommodation.prefecture_text
+        %td= accommodation.accommodation_type_text
+        %td= accommodation.published? ? "#{t('general.public')}" : "#{t('general.private')}"

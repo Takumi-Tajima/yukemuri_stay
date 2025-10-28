@@ -69,4 +69,10 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+
+  # Rails 8対応: Deviseマッピング作成のため、テスト前にルーティングを読み込む。
+  # 参考: https://github.com/heartcombo/devise/issues/5705#issue-2458860653
+  config.before(:each, type: :system) do
+    Rails.application.routes_reloader.execute_unless_loaded
+  end
 end

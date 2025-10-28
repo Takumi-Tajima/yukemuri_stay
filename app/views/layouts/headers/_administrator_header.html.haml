@@ -4,4 +4,4 @@
       .navbar-brand.fs-2= link_to 'Yukemuri Stay [administrator]', administrators_root_path, class: 'text-decoration-none text-dark'
     %ul.navbar-nav.ms-auto
       - if administrator_signed_in?
-        = button_to t('general.logout'), destroy_administrator_session_path, method: :delete, data: { turbo_confirm: t('confirm.log_out_confirm') } ,class: 'btn btn-outline-danger'
+        = button_to t('general.logout'), destroy_administrator_session_path, method: :delete, data: { turbo_confirm: t('confirm.log_out') } ,class: 'btn btn-outline-danger'

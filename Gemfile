@@ -5,6 +5,7 @@ gem 'rails', '~> 8.0.3'
 gem 'bootsnap', require: false
 gem 'cssbundling-rails'
 gem 'devise'
+gem 'enumerize'
 gem 'haml-rails'
 gem 'jsbundling-rails'
 gem 'pg'
