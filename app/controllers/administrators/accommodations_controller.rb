@@ -45,6 +45,6 @@ class Administrators::AccommodationsController < Administrators::ApplicationCont
   end
 
   def accommodation_params
-    params.expect(accommodation: %i[name prefecture address phone_number accommodation_type description published])
+    params.expect(accommodation: %i[name prefecture address phone_number accommodation_type description image published])
   end
 end

@@ -2,6 +2,7 @@
 
 .card
   .card-body
+    = accommodation_image_tag(@accommodation, :display)
     %dl.row
       %dt.col-sm-3= Accommodation.human_attribute_name(:name)
       %dd.col-sm-9= @accommodation.name

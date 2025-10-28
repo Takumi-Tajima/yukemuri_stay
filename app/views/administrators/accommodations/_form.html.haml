@@ -5,5 +5,6 @@
   = f.input :phone_number
   = f.input :accommodation_type
   = f.input :description, as: :text, input_html: { rows: 5 }
+  = f.input :image, as: :file, input_html: { accept: 'image/png,image/jpeg,image/jpg' }
   = f.input :published, label: '公開する'
   = f.button :submit, class: 'btn-primary'

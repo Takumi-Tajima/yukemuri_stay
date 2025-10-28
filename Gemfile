@@ -2,11 +2,13 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 8.0.3'
 
+gem 'active_storage_validations'
 gem 'bootsnap', require: false
 gem 'cssbundling-rails'
 gem 'devise'
 gem 'enumerize'
 gem 'haml-rails'
+gem 'image_processing'
 gem 'jsbundling-rails'
 gem 'pg'
 gem 'propshaft'
