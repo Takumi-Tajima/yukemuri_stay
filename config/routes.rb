@@ -1,10 +1,12 @@
 Rails.application.routes.draw do
   devise_for :administrators, controllers: { sessions: 'administrators/sessions' }
 
-  root to: 'home#index'
+  root 'accommodations#index'
+
+  resources :accommodations, only: %i[index show]
 
   namespace :administrators do
-    root to: 'accommodations#index'
+    root 'accommodations#index'
     resources :accommodations, only: %i[index show new edit create update destroy]
   end
 

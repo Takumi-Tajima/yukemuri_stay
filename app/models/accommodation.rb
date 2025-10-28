@@ -26,4 +26,5 @@ class Accommodation < ApplicationRecord
   validates :image, content_type: IMAGE_SETTINGS[:content_type], size: { less_than: IMAGE_SETTINGS[:max_size] }
 
   scope :default_order, -> { order(:id) }
+  scope :published, -> { where(published: true) }
 end

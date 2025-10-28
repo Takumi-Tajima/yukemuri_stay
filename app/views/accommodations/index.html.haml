@@ -1,0 +1,11 @@
+.row.row-cols-1.row-cols-md-2.row-cols-lg-3.g-4
+  - @accommodations.each do |accommodation|
+    .col
+      = link_to accommodation_path(accommodation), class: 'text-decoration-none' do
+        .card
+          .card-body
+            .ratio.ratio-4x3
+              = accommodation_image_tag(accommodation, :thumbnail)
+            .card-title.mt-3= accommodation.name
+            .card-text= accommodation.prefecture_text
+            .card-text= accommodation.accommodation_type_text
