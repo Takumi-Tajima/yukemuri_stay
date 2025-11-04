@@ -1,0 +1,18 @@
+.row
+  .col-11.mx-auto
+    .card
+      .row.g-0.p-3
+        .col-md-6
+          = room_type_image_tag(@room_type, :display)
+        .col-md-6
+          .card-body
+            %h1.card-title.mb-3= @room_type.name
+            .card-text
+              %strong= RoomType.human_attribute_name(:capacity)
+              = "#{@room_type.capacity}名"
+            .card-text
+              %strong= RoomType.human_attribute_name(:base_price)
+              = number_to_currency(@room_type.base_price)
+            .card-text
+              %strong= RoomType.human_attribute_name(:description)
+              = @room_type.description

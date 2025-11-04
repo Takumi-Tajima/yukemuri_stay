@@ -1,0 +1,7 @@
+= simple_form_for([:administrators, accommodation, room_type]) do |f|
+  = f.input :name
+  = f.input :description, as: :text, input_html: { rows: 5 }
+  = f.input :capacity
+  = f.input :base_price
+  = f.input :main_image, as: :file, input_html: { accept: 'image/png,image/jpeg,image/jpg' }
+  = f.button :submit, class: 'btn-primary'

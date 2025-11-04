@@ -1,0 +1,4 @@
+= simple_form_for([:administrators, accommodation, room_type, room_availability]) do |f|
+  = f.input :date, as: :date, html5: true
+  = f.input :remaining_rooms
+  = f.button :submit, class: 'btn-primary'
