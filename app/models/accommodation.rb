@@ -10,7 +10,7 @@ class Accommodation < ApplicationRecord
   extend Enumerize
 
   enumerize :accommodation_type, in: ACCOMMODATION_TYPE, scope: true
-  enumerize :prefecture, in: Prefecture::LIST
+  enumerize :prefecture, in: Prefecture::ALL
 
   has_one_attached :image do |attachable|
     attachable.variant :thumbnail, resize_to_limit: IMAGE_SETTINGS[:thumbnail_size]
