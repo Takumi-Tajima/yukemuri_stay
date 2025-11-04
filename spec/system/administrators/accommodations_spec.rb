@@ -5,13 +5,13 @@ RSpec.describe '宿泊施設の機能', type: :system do
 
   before { sign_in administrator }
 
-  describe '表示機能', :rack_test do
+  describe '表示機能' do
     before do
-      create(:accommodation, name: 'ゆけむり温泉', prefecture: Prefecture::LIST[:tokyo], address: '東京都新宿区1-1-1', phone_number: '03-1234-5678',
+      create(:accommodation, name: 'ゆけむり温泉', prefecture: Prefecture::ALL['東京都'], address: '東京都新宿区1-1-1', phone_number: '03-1234-5678',
                              accommodation_type: 'hotel', description: '素敵な温泉旅館です。', published: true)
     end
 
-    it '宿泊施設のデータが表示されること' do
+    it 'データが表示されること' do
       visit administrators_accommodations_path
 
       expect(page).to have_content '宿泊施設一覧'
@@ -30,7 +30,7 @@ RSpec.describe '宿泊施設の機能', type: :system do
     end
   end
 
-  describe '登録機能', :rack_test do
+  describe '登録機能' do
     it '新規登録ができること' do
       visit administrators_accommodations_path
 
@@ -63,11 +63,11 @@ RSpec.describe '宿泊施設の機能', type: :system do
 
   describe '削除機能' do
     before do
-      create(:accommodation, name: 'さくら温泉', prefecture: Prefecture::LIST[:nagano], address: '長野県長野市1-2', phone_number: '026-987-6543',
+      create(:accommodation, name: 'さくら温泉', prefecture: Prefecture::ALL['長野県'], address: '長野県長野市1-2', phone_number: '026-987-6543',
                              accommodation_type: 'guest_house', description: '古い良いゲストハウスです。', published: true)
     end
 
-    it '宿泊施設の削除ができること' do
+    it '削除ができること', :js do
       visit administrators_accommodations_path
 
       expect(page).to have_content '宿泊施設一覧'
