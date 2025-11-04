@@ -27,7 +27,7 @@ class Administrators::AccommodationsController < Administrators::ApplicationCont
 
   def update
     if @accommodation.update(accommodation_params)
-      redirect_to administrators_accommodation_path(@accommodation), notice: t('controllers.updated')
+      redirect_to administrators_accommodation_path(@accommodation), notice: t('controllers.updated'), status: :see_other
     else
       render :edit, status: :unprocessable_content
     end
@@ -35,7 +35,7 @@ class Administrators::AccommodationsController < Administrators::ApplicationCont
 
   def destroy
     @accommodation.destroy!
-    redirect_to administrators_accommodations_path, notice: t('controllers.destroyed')
+    redirect_to administrators_accommodations_path, notice: t('controllers.destroyed'), status: :see_other
   end
 
   private
@@ -45,6 +45,6 @@ class Administrators::AccommodationsController < Administrators::ApplicationCont
   end
 
   def accommodation_params
-    params.expect(accommodation: %i[name prefecture address phone_number accommodation_type description image published])
+    params.expect(accommodation: %i[name prefecture address phone_number accommodation_type description main_image published])
   end
 end

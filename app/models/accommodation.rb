@@ -6,9 +6,8 @@ class Accommodation < ApplicationRecord
   enumerize :accommodation_type, in: ACCOMMODATION_TYPE, scope: true
   enumerize :prefecture, in: Prefecture::ALL
 
-  has_one_attached :image do |attachable|
-    attachable.variant :thumbnail, resize_to_limit: IMAGE_SETTINGS[:thumbnail_size]
-    attachable.variant :display, resize_to_limit: IMAGE_SETTINGS[:display_size]
+  has_many :room_types, dependent: :destroy
+
   has_one_attached :main_image do |attachable|
     attachable.variant :thumbnail, resize_to_limit: ImageSettings::MAIN_IMAGE[:thumbnail_size]
     attachable.variant :display, resize_to_limit: ImageSettings::MAIN_IMAGE[:display_size]
