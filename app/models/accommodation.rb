@@ -1,11 +1,5 @@
 class Accommodation < ApplicationRecord
   ACCOMMODATION_TYPE = %w[hotel inn guest_house].freeze
-  IMAGE_SETTINGS = {
-    content_type: %i[png jpg jpeg],
-    max_size: 5.megabytes,
-    thumbnail_size: [300, 300],
-    display_size: [600, 600],
-  }.freeze
 
   extend Enumerize
 
@@ -15,6 +9,9 @@ class Accommodation < ApplicationRecord
   has_one_attached :image do |attachable|
     attachable.variant :thumbnail, resize_to_limit: IMAGE_SETTINGS[:thumbnail_size]
     attachable.variant :display, resize_to_limit: IMAGE_SETTINGS[:display_size]
+  has_one_attached :main_image do |attachable|
+    attachable.variant :thumbnail, resize_to_limit: ImageSettings::MAIN_IMAGE[:thumbnail_size]
+    attachable.variant :display, resize_to_limit: ImageSettings::MAIN_IMAGE[:display_size]
   end
 
   validates :name, presence: true, uniqueness: { scope: :address }
@@ -23,7 +20,7 @@ class Accommodation < ApplicationRecord
   validates :phone_number, presence: true, format: { with: /\A\d[\d-]{8,}\d\z/ }
   validates :accommodation_type, presence: true
   validates :description, presence: true
-  validates :image, content_type: IMAGE_SETTINGS[:content_type], size: { less_than: IMAGE_SETTINGS[:max_size] }
+  validates :main_image, content_type: ImageSettings::MAIN_IMAGE[:content_type], size: { less_than: ImageSettings::MAIN_IMAGE[:max_size] }
 
   scope :default_order, -> { order(:id) }
   scope :published, -> { where(published: true) }
