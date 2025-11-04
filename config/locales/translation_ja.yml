@@ -15,15 +15,31 @@ ja:
         phone_number: 電話番号
         accommodation_type: 施設タイプ
         description: 施設説明
-        image: 施設画像
+        main_image: 施設画像
         published: 公開ステータス
+      room_type:
+        name: 部屋タイプ名
+        capacity: 定員
+        base_price: 基本料金（税抜）
+        description: 部屋説明
+        accommodation: 宿泊施設
+        main_image: 部屋画像
+      room_availability:
+        room_type: 部屋タイプ
+        date: 日付
+        remaining_rooms: 空き部屋数
   general:
     create: 新規登録
     edit: 編集
     destroy: 削除
     logout: ログアウト
+    login: ログイン
     public: 公開
     private: 非公開
+    search: 検索
+  form:
+    select:
+      include_blank: 選択なし
   controllers:
     created: 作成しました
     updated: 更新しました
