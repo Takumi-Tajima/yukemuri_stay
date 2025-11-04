@@ -27,4 +27,10 @@ class Accommodation < ApplicationRecord
 
   scope :default_order, -> { order(:id) }
   scope :published, -> { where(published: true) }
+
+  class << self
+    def ransackable_attributes(auth_object = nil)
+      %w[prefecture accommodation_type]
+    end
+  end
 end

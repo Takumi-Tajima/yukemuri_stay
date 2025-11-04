@@ -1,3 +1,14 @@
+.mb-3
+  = simple_form_for(@q, url: accommodations_path, method: :get) do |f|
+    .d-flex.align-items-end.gap-3
+      %div
+        = f.label :prefecture_eq, Accommodation.human_attribute_name(:prefecture), class: 'form-label'
+        = f.input_field :prefecture_eq, collection: Prefecture.for_select, include_blank: t('form.select.include_blank'), label: false, class: 'form-select'
+      %div
+        = f.label :accommodation_type_eq, Accommodation.human_attribute_name(:accommodation_type), class: 'form-label'
+        = f.input_field :accommodation_type_eq, collection: Accommodation.accommodation_type.options, include_blank: t('form.select.include_blank'), label: false, class: 'form-select'
+      = f.submit t('general.search'), class: 'btn btn-primary'
+
 .row.row-cols-1.row-cols-md-2.row-cols-lg-3.g-4
   - @accommodations.each do |accommodation|
     .col

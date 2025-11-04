@@ -1,6 +1,7 @@
 class AccommodationsController < ApplicationController
   def index
-    @accommodations = Accommodation.published.includes(:image_attachment).default_order
+    @q = Accommodation.published.includes(:main_image_attachment).ransack(params[:q])
+    @accommodations = @q.result.default_order
   end
 
   def show
