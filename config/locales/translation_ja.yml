@@ -1,6 +1,8 @@
 ja:
   activerecord:
     attributes:
+      user:
+        name: 名前
       administrator:
         email: メールアドレス
         name: 名前
