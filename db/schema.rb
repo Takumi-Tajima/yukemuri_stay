@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_28_064601) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_03_094104) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -72,6 +72,51 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_28_064601) do
     t.index ["email"], name: "index_administrators_on_email", unique: true
   end
 
+  create_table "room_availabilities", force: :cascade do |t|
+    t.bigint "room_type_id", null: false
+    t.date "date", null: false
+    t.integer "remaining_rooms", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["room_type_id", "date"], name: "index_room_availabilities_on_room_type_id_and_date", unique: true
+  end
+
+  create_table "room_types", force: :cascade do |t|
+    t.bigint "accommodation_id", null: false
+    t.string "name", null: false
+    t.integer "capacity", null: false
+    t.integer "base_price", null: false
+    t.text "description", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["accommodation_id", "name"], name: "index_room_types_on_accommodation_id_and_name", unique: true
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "email", null: false
+    t.string "name", null: false
+    t.string "encrypted_password", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
+    t.string "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string "unconfirmed_email"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "room_availabilities", "room_types"
+  add_foreign_key "room_types", "accommodations"
 end
