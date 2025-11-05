@@ -35,7 +35,7 @@
     %tbody
       - @room_type.room_availabilities.default_order.each do |room_availability|
         %tr
-          %td= room_availability.date
+          %td= l(room_availability.date)
           %td #{room_availability.remaining_rooms}室
           %td= link_to t('general.edit'), edit_administrators_accommodation_room_type_room_availability_path(@accommodation, @room_type, room_availability)
 
