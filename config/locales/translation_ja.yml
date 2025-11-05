@@ -72,3 +72,5 @@ ja:
   errors:
     messages:
       validate_check_in_date_range: は翌日以降90日後までの間で指定してください
+      validate_guest_count_within_capacity: 合計人数が部屋の定員を超えています
+      validate_room_availability: 選択された日付では、利用可能な部屋数が不足しています

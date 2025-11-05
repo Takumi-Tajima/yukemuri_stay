@@ -1,6 +1,8 @@
 class Reservation < ApplicationRecord
   MIN_CHECK_IN_DAYS_FROM_NOW = 1
   MAX_CHECK_IN_DAYS_FROM_NOW = 90
+  MIN_NIGHTS = 1
+  MAX_NIGHTS = 5
   RESERVATION_STATUSES = %w[confirmed checked_out cancelled].freeze
 
   extend Enumerize
@@ -13,18 +15,14 @@ class Reservation < ApplicationRecord
   belongs_to :room_type
 
   validates :check_in_date, presence: true
-  validates :nights, numericality: { only_integer: true, greater_than: 0 }
+  validates :nights, numericality: { only_integer: true, in: MIN_NIGHTS..MAX_NIGHTS }
   validates :adults, numericality: { only_integer: true, greater_than: 0 }
   validates :children, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
-  # TODO: after_validationのためバリデーションをコメントアウトしている。21行目の問題が解決次第修正をすること。
-  # validates :total_amount, numericality: { only_integer: true, greater_than: 0 }
+  validates :total_amount, numericality: { only_integer: true, greater_than: 0 }
   validates :status, presence: true
   validate :validate_check_in_date_range
-
-  # TODO: バリデーションエラー時にも計算処理が走ってしまうので改善をするか、理由を考えること
-  # コントローラから直呼びにする方法→呼び忘れ時にvalidates :total_amountで気づけるので問題ないが、正直冗長だよね
-  # 別のコールバックを利用する方法→before_saveにするとif文でroom_typeやnightsが存在するかを検証しないといけなくなる。
-  after_validation :set_and_calculate_total_amount
+  validate :validate_guest_count_within_capacity
+  validate :validate_room_availability
 
   # TODO: リファクタ
   # エラーハンドリング方法について
@@ -59,5 +57,46 @@ class Reservation < ApplicationRecord
     raise ArgumentError, 'nights is required' if nights.blank?
     raise ArgumentError, 'adults is required' if adults.blank?
     raise ArgumentError, 'children is required' if children.blank?
+  end
+
+  def validate_check_in_date_range
+    return if check_in_date.blank?
+
+    min_date = Date.current + MIN_CHECK_IN_DAYS_FROM_NOW.days
+    max_date = Date.current + MAX_CHECK_IN_DAYS_FROM_NOW.days
+
+    unless check_in_date.between?(min_date, max_date)
+      errors.add(:check_in_date, :validate_check_in_date_range)
+    end
+  end
+
+  def validate_guest_count_within_capacity
+    return if adults.blank? || children.blank? || room_type.blank?
+
+    total_guests = adults + children
+
+    if total_guests > room_type.capacity
+      errors.add(:base, :validate_guest_count_within_capacity)
+    end
+  end
+
+  # TODO: リファクタ
+  def validate_room_availability
+    return if check_in_date.blank? || nights.blank? || room_type.blank?
+
+    stay_dates = (check_in_date...(check_in_date + nights.days)).to_a
+
+    availabilities = room_type.room_availabilities
+                              .where(date: stay_dates)
+                              .index_by(&:date)
+
+    stay_dates.each do |date|
+      availability = availabilities[date]
+
+      if availability.blank? || availability.remaining_rooms <= 0
+        errors.add(:base, :validate_room_availability)
+        break
+      end
+    end
   end
 end
