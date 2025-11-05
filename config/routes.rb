@@ -31,6 +31,7 @@ Rails.application.routes.draw do
       end
     end
     resources :reservations, only: %i[index show edit update]
+    resources :users, only: %i[index show destroy]
   end
 
   mount LetterOpenerWeb::Engine, at: '/letter_opener' if Rails.env.development?

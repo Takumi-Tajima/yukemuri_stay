@@ -1,0 +1,18 @@
+%h1.fs-2.mb-3 ユーザー一覧
+
+%table.table
+  %thead
+    %tr
+      %th= User.human_attribute_name(:name)
+      %th= User.human_attribute_name(:email)
+      %th= User.human_attribute_name(:sign_in_count)
+      %th= User.human_attribute_name(:current_sign_in_at)
+      %th= User.human_attribute_name(:confirmed_at)
+  %tbody
+    - @users.each do |user|
+      %tr
+        %td= link_to user.name, administrators_user_path(user)
+        %td= user.email
+        %td= user.sign_in_count
+        %td= user.current_sign_in_at ? l(user.current_sign_in_at) : '-'
+        %td= user.confirmed_at ? l(user.confirmed_at) : '-'
