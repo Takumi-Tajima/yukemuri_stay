@@ -43,6 +43,6 @@ class Administrators::Accommodations::RoomTypesController < Administrators::Acco
   end
 
   def room_type_params
-    params.expect(room_type: %i[name description capacity base_price main_image])
+    params.expect(room_type: %i[name description capacity base_price position main_image])
   end
 end

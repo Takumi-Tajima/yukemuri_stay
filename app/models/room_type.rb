@@ -3,6 +3,8 @@ class RoomType < ApplicationRecord
   has_many :room_availabilities, dependent: :destroy
   has_many :reservations, dependent: :restrict_with_exception
 
+  acts_as_list
+
   has_one_attached :main_image do |attachable|
     attachable.variant :display, resize_to_limit: ImageSettings::MAIN_IMAGE[:display_size]
   end
@@ -12,4 +14,6 @@ class RoomType < ApplicationRecord
   validates :capacity, numericality: { only_integer: true, greater_than: 0 }
   validates :base_price, numericality: { only_integer: true, greater_than: 0 }
   validates :main_image, content_type: ImageSettings::MAIN_IMAGE[:content_type], size: { less_than: ImageSettings::MAIN_IMAGE[:max_size] }
+
+  scope :default_order, -> { order(:position) }
 end
