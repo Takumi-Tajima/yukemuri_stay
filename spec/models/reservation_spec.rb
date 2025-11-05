@@ -5,7 +5,7 @@ RSpec.describe Reservation, type: :model do
     let(:user) { create(:user) }
     let(:accommodation) { create(:accommodation) }
     let(:room_type) { create(:room_type, accommodation:, base_price: 10000, capacity: 5) }
-    let(:check_in_date) { Date.current + 1.day }
+    let(:check_in_date) { tomorrow }
 
     context '大人だけの時' do
       let(:nights) { 2 }
@@ -70,7 +70,6 @@ RSpec.describe Reservation, type: :model do
     end
   end
 
-  # TODO: check_in_date = Date.current + 1.dayって共通化できない？
   describe 'バリデーション' do
     let(:user) { create(:user) }
     let(:accommodation) { create(:accommodation) }
@@ -78,7 +77,7 @@ RSpec.describe Reservation, type: :model do
 
     describe '宿泊日は翌日以降~90日後までの間であること' do
       it '翌日のチェックイン日で予約が成功すること' do
-        check_in_date = Date.current + 1.day
+        check_in_date = tomorrow
         create(:room_availability, room_type:, date: check_in_date, remaining_rooms: 1)
 
         reservation = build(:reservation, user:, room_type:, check_in_date:, nights: 1, adults: 1, children: 0)
@@ -86,7 +85,7 @@ RSpec.describe Reservation, type: :model do
       end
 
       it '今日のチェックイン日で予約が失敗すること' do
-        check_in_date = Date.current
+        check_in_date = today
         reservation = build(:reservation, user:, room_type:, check_in_date:, nights: 1, adults: 1, children: 0)
 
         expect(reservation).not_to be_valid
@@ -94,7 +93,7 @@ RSpec.describe Reservation, type: :model do
       end
 
       it '91日後のチェックイン日で予約が失敗すること' do
-        check_in_date = Date.current + 91.days
+        check_in_date = days_from_now(91)
         reservation = build(:reservation, user:, room_type:, check_in_date:, nights: 1, adults: 1, children: 0)
 
         expect(reservation).not_to be_valid
@@ -104,7 +103,7 @@ RSpec.describe Reservation, type: :model do
 
     describe '泊数は1~5泊までであること' do
       it '3泊で予約が成功すること' do
-        check_in_date = Date.current + 1.day
+        check_in_date = tomorrow
         3.times do |i|
           create(:room_availability, room_type:, date: check_in_date + i.days, remaining_rooms: 1)
         end
@@ -114,7 +113,7 @@ RSpec.describe Reservation, type: :model do
       end
 
       it '0泊で予約が失敗すること' do
-        check_in_date = Date.current + 1.day
+        check_in_date = tomorrow
         reservation = build(:reservation, user:, room_type:, check_in_date:, nights: 0, adults: 1, children: 0)
 
         expect(reservation).not_to be_valid
@@ -122,7 +121,7 @@ RSpec.describe Reservation, type: :model do
       end
 
       it '6泊で予約が失敗すること' do
-        check_in_date = Date.current + 1.day
+        check_in_date = tomorrow
         reservation = build(:reservation, user:, room_type:, check_in_date:, nights: 6, adults: 1, children: 0)
 
         expect(reservation).not_to be_valid
@@ -132,7 +131,7 @@ RSpec.describe Reservation, type: :model do
 
     describe '部屋の定員数を超える人数は予約できないこと' do
       it '大人2人、子供0人で定員2人の部屋を予約が成功すること(定員ぴったり)' do
-        check_in_date = Date.current + 1.day
+        check_in_date = tomorrow
         create(:room_availability, room_type:, date: check_in_date, remaining_rooms: 1)
 
         reservation = build(:reservation, user:, room_type:, check_in_date:, nights: 1, adults: 2, children: 0)
@@ -140,7 +139,7 @@ RSpec.describe Reservation, type: :model do
       end
 
       it '大人2人、子供1人で定員2人の部屋を予約が失敗すること(定員オーバー)' do
-        check_in_date = Date.current + 1.day
+        check_in_date = tomorrow
         create(:room_availability, room_type:, date: check_in_date, remaining_rooms: 1)
 
         reservation = build(:reservation, user:, room_type:, check_in_date:, nights: 1, adults: 2, children: 1)
@@ -152,7 +151,7 @@ RSpec.describe Reservation, type: :model do
 
     describe '空いている部屋がない場合は予約できないこと' do
       it '1泊で全日程に空室(remaining_rooms=1以上)がある場合、予約が成功すること' do
-        check_in_date = Date.current + 1.day
+        check_in_date = tomorrow
         create(:room_availability, room_type:, date: check_in_date, remaining_rooms: 1)
 
         reservation = build(:reservation, user:, room_type:, check_in_date:, nights: 1, adults: 1, children: 0)
@@ -160,7 +159,7 @@ RSpec.describe Reservation, type: :model do
       end
 
       it '1泊でroom_availabilityレコードが存在しない場合、予約が失敗すること' do
-        check_in_date = Date.current + 1.day
+        check_in_date = tomorrow
         reservation = build(:reservation, user:, room_type:, check_in_date:, nights: 1, adults: 1, children: 0)
 
         expect(reservation).not_to be_valid
@@ -168,7 +167,7 @@ RSpec.describe Reservation, type: :model do
       end
 
       it '1泊でremaining_rooms=0の場合、予約が失敗すること' do
-        check_in_date = Date.current + 1.day
+        check_in_date = tomorrow
         create(:room_availability, room_type:, date: check_in_date, remaining_rooms: 0)
 
         reservation = build(:reservation, user:, room_type:, check_in_date:, nights: 1, adults: 1, children: 0)
@@ -186,7 +185,7 @@ RSpec.describe Reservation, type: :model do
 
     describe '予約作成時に空き部屋数が減ること' do
       it '1泊の予約で、その日の空き部屋数が1減ること' do
-        check_in_date = Date.current + 1.day
+        check_in_date = tomorrow
         availability = create(:room_availability, room_type:, date: check_in_date, remaining_rooms: 5)
 
         expect {
@@ -195,7 +194,7 @@ RSpec.describe Reservation, type: :model do
       end
 
       it '3泊の予約で、各日の空き部屋数が1減ること' do
-        check_in_date = Date.current + 1.day
+        check_in_date = tomorrow
         availability_day1 = create(:room_availability, room_type:, date: check_in_date, remaining_rooms: 5)
         availability_day2 = create(:room_availability, room_type:, date: check_in_date + 1.day, remaining_rooms: 5)
         availability_day3 = create(:room_availability, room_type:, date: check_in_date + 2.days, remaining_rooms: 5)
@@ -208,7 +207,7 @@ RSpec.describe Reservation, type: :model do
       end
 
       it 'チェックアウト日の空き部屋数は減らないこと' do
-        check_in_date = Date.current + 1.day
+        check_in_date = tomorrow
         check_out_date = check_in_date + 2.days
 
         create(:room_availability, room_type:, date: check_in_date, remaining_rooms: 5)
@@ -230,7 +229,7 @@ RSpec.describe Reservation, type: :model do
     describe '#cancellable?' do
       context 'confirmed状態でチェックイン日が2日後の場合' do
         it 'キャンセル可能であること' do
-          check_in_date = Date.current + 2.days
+          check_in_date = days_from_now(2)
           create(:room_availability, room_type:, date: check_in_date, remaining_rooms: 5)
           reservation = create(:reservation, user:, room_type:, check_in_date:, nights: 1, adults: 1, children: 0, status: 'confirmed')
 
@@ -240,7 +239,7 @@ RSpec.describe Reservation, type: :model do
 
       context 'confirmed状態でチェックイン日が翌日の場合' do
         it 'キャンセル不可であること' do
-          check_in_date = Date.current + 1.day
+          check_in_date = tomorrow
           create(:room_availability, room_type:, date: check_in_date, remaining_rooms: 5)
           reservation = create(:reservation, user:, room_type:, check_in_date:, nights: 1, adults: 1, children: 0, status: 'confirmed')
 
@@ -250,7 +249,7 @@ RSpec.describe Reservation, type: :model do
 
       context 'cancelled状態の場合' do
         it 'キャンセル不可であること' do
-          check_in_date = Date.current + 3.days
+          check_in_date = days_from_now(3)
           create(:room_availability, room_type:, date: check_in_date, remaining_rooms: 5)
           reservation = create(:reservation, user:, room_type:, check_in_date:, nights: 1, adults: 1, children: 0, status: 'cancelled')
 
@@ -262,7 +261,7 @@ RSpec.describe Reservation, type: :model do
     describe '#cancel!' do
       context 'キャンセル可能な場合' do
         it 'statusがcancelledになり、空き部屋数が1増えること' do
-          check_in_date = Date.current + 3.days
+          check_in_date = days_from_now(3)
           availability = create(:room_availability, room_type:, date: check_in_date, remaining_rooms: 5)
           reservation = create(:reservation, user:, room_type:, check_in_date:, nights: 1, adults: 1, children: 0, status: 'confirmed')
 
@@ -275,11 +274,10 @@ RSpec.describe Reservation, type: :model do
 
       context 'キャンセル不可な場合' do
         it '例外が発生すること' do
-          check_in_date = Date.current + 1.day
+          check_in_date = tomorrow
           create(:room_availability, room_type:, date: check_in_date, remaining_rooms: 5)
           reservation = create(:reservation, user:, room_type:, check_in_date:, nights: 1, adults: 1, children: 0, status: 'confirmed')
 
-          # TODO: これで良い？
           expect { reservation.cancel! }.to raise_error(RuntimeError)
         end
       end

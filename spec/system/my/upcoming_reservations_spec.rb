@@ -44,7 +44,7 @@ RSpec.describe 'マイページ今後の予約の機能', type: :system do
 
     context 'キャンセル可能な予約の場合' do
       it 'キャンセルボタンが表示され、キャンセルできること' do
-        check_in_date = Date.current + 3.days
+        check_in_date = days_from_now(3)
         create(:room_availability, room_type:, date: check_in_date, remaining_rooms: 5)
         reservation = create(:reservation, user:, room_type:, check_in_date:, nights: 1, adults: 1, children: 0, status: 'confirmed')
 
@@ -62,7 +62,7 @@ RSpec.describe 'マイページ今後の予約の機能', type: :system do
 
     context 'キャンセル不可な予約の場合' do
       it 'キャンセルボタンが表示されないこと' do
-        check_in_date = Date.current + 1.day
+        check_in_date = tomorrow
         create(:room_availability, room_type:, date: check_in_date, remaining_rooms: 5)
         reservation = create(:reservation, user:, room_type:, check_in_date:, nights: 1, adults: 1, children: 0, status: 'confirmed')
 
