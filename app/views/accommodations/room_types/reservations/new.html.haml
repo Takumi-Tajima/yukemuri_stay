@@ -1,5 +1,6 @@
 .row
   .col-md-8.mx-auto
+    = render 'layouts/shared/error_messages', resource: @reservation
     .card.mb-5
       .card-body
         .fs-4.card-title= @room_type.name
