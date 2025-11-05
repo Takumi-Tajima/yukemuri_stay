@@ -19,7 +19,7 @@ class Administrators::Accommodations::RoomTypes::RoomAvailabilitiesController < 
   end
 
   def update
-    if @room_availability.update(room_availability_params)
+    if @room_availability.update(update_room_availability_params)
       redirect_to administrators_accommodation_room_type_path(@accommodation, @room_type), notice: t('controllers.updated'), status: :see_other
     else
       render :edit, status: :unprocessable_content
@@ -34,5 +34,9 @@ class Administrators::Accommodations::RoomTypes::RoomAvailabilitiesController < 
 
   def room_availability_params
     params.expect(room_availability: %i[date remaining_rooms])
+  end
+
+  def update_room_availability_params
+    params.expect(room_availability: %i[remaining_rooms])
   end
 end
