@@ -43,6 +43,7 @@ RSpec.describe Reservation, type: :model do
   #   end
   # end
 
+  # TODO: check_in_date = Date.current + 1.dayって共通化できない？
   describe 'バリデーション' do
     let(:user) { create(:user) }
     let(:accommodation) { create(:accommodation) }
@@ -147,6 +148,49 @@ RSpec.describe Reservation, type: :model do
 
         expect(reservation).not_to be_valid
         expect(reservation.errors).to be_of_kind(:base, :validate_room_availability)
+      end
+    end
+  end
+
+  describe '空き部屋の管理' do
+    let(:user) { create(:user) }
+    let(:accommodation) { create(:accommodation) }
+    let(:room_type) { create(:room_type, accommodation:, capacity: 2) }
+
+    describe '予約作成時に空き部屋数が減ること' do
+      it '1泊の予約で、その日の空き部屋数が1減ること' do
+        check_in_date = Date.current + 1.day
+        availability = create(:room_availability, room_type:, date: check_in_date, remaining_rooms: 5)
+
+        expect {
+          create(:reservation, user:, room_type:, check_in_date:, nights: 1, adults: 1, children: 0)
+        }.to change { availability.reload.remaining_rooms }.from(5).to(4)
+      end
+
+      it '3泊の予約で、各日の空き部屋数が1減ること' do
+        check_in_date = Date.current + 1.day
+        availability_day1 = create(:room_availability, room_type:, date: check_in_date, remaining_rooms: 5)
+        availability_day2 = create(:room_availability, room_type:, date: check_in_date + 1.day, remaining_rooms: 5)
+        availability_day3 = create(:room_availability, room_type:, date: check_in_date + 2.days, remaining_rooms: 5)
+
+        create(:reservation, user:, room_type:, check_in_date:, nights: 3, adults: 1, children: 0)
+
+        expect(availability_day1.reload.remaining_rooms).to eq(4)
+        expect(availability_day2.reload.remaining_rooms).to eq(4)
+        expect(availability_day3.reload.remaining_rooms).to eq(4)
+      end
+
+      it 'チェックアウト日の空き部屋数は減らないこと' do
+        check_in_date = Date.current + 1.day
+        check_out_date = check_in_date + 2.days
+
+        create(:room_availability, room_type:, date: check_in_date, remaining_rooms: 5)
+        create(:room_availability, room_type:, date: check_in_date + 1.day, remaining_rooms: 5)
+        availability_checkout_day = create(:room_availability, room_type:, date: check_out_date, remaining_rooms: 5)
+
+        create(:reservation, user:, room_type:, check_in_date:, nights: 2, adults: 1, children: 0)
+
+        expect(availability_checkout_day.reload.remaining_rooms).to eq(5)
       end
     end
   end

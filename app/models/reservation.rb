@@ -24,6 +24,9 @@ class Reservation < ApplicationRecord
   validate :validate_guest_count_within_capacity
   validate :validate_room_availability
 
+  # TODO: もしかしてテーブル名を変えた方が良い説
+  after_create :decrease_remaining_rooms!
+
   # TODO: リファクタ
   # エラーハンドリング方法について
   # エラーメッセージについて
@@ -52,6 +55,7 @@ class Reservation < ApplicationRecord
 
   private
 
+  # TODO: リファクタする
   def validate_calculation_dependencies!
     raise ArgumentError, 'room_type is required' if room_type.blank?
     raise ArgumentError, 'nights is required' if nights.blank?
@@ -97,6 +101,16 @@ class Reservation < ApplicationRecord
         errors.add(:base, :validate_room_availability)
         break
       end
+    end
+  end
+
+  # TODO: 確認
+  def decrease_remaining_rooms!
+    stay_dates = (check_in_date...(check_in_date + nights.days)).to_a
+
+    stay_dates.each do |date|
+      availability = room_type.room_availabilities.lock.find_by!(date: date)
+      availability.decrement_remaining_rooms!
     end
   end
 end
