@@ -1,5 +1,5 @@
 class Administrator < ApplicationRecord
-  devise :database_authenticatable, :registerable, :rememberable, :validatable, :trackable
+  devise :database_authenticatable, :rememberable, :validatable, :trackable
 
   validates :name, presence: true
 end
