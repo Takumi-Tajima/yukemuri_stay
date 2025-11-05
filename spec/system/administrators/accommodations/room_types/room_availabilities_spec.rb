@@ -28,9 +28,9 @@ RSpec.describe '空き部屋の機能', type: :system do
       expect(page).to have_content '客室タイプ詳細'
       expect(page).to have_content '空いている部屋の一覧'
       expect(page).to have_content '2025-12-01'
-      expect(page).to have_content '5'
+      expect(page).to have_content '5室'
       expect(page).to have_content '2025-12-02'
-      expect(page).to have_content '3'
+      expect(page).to have_content '3室'
     end
   end
 
@@ -66,7 +66,7 @@ RSpec.describe '空き部屋の機能', type: :system do
 
       expect(page).to have_content '客室タイプ詳細'
       expect(page).to have_content '2025-12-15'
-      expect(page).to have_content '10'
+      expect(page).to have_content '10室'
     end
   end
 
@@ -93,25 +93,24 @@ RSpec.describe '空き部屋の機能', type: :system do
       expect(page).to have_content '客室タイプ詳細'
       expect(page).to have_content '空いている部屋の一覧'
       expect(page).to have_content '2025-12-20'
-      expect(page).to have_content '8'
+      expect(page).to have_content '8室'
 
       within 'table' do
         click_on '編集'
       end
 
-      expect(page).to have_content '空室情報編集'
+      expect(page).to have_content '2025/12/20 空室情報編集'
 
-      fill_in '日付', with: '2025-12-21'
       fill_in '空き部屋数', with: '15'
 
-      click_on '更新'
+      expect {
+        click_on '更新'
+        expect(page).to have_content '更新しました'
+      }.not_to change(room_type.room_availabilities, :count)
 
-      expect(page).to have_content '更新しました'
       expect(page).to have_content '客室タイプ詳細'
-      expect(page).to have_content '2025-12-21'
-      expect(page).to have_content '15'
-      expect(page).not_to have_content '2025-12-20'
-      expect(page).not_to have_content '8'
+      expect(page).to have_content '15室'
+      expect(page).not_to have_content '8室'
     end
   end
 end
