@@ -27,7 +27,7 @@ class Reservation < ApplicationRecord
   # TODO: もしかしてテーブル名を変えた方が良い説
   after_create :decrease_remaining_rooms!
 
-  scope :default_order, -> { order(:check_in_date) }
+  scope :default_order, -> { order(:check_in_date, :id) }
   scope :upcoming, -> { where(status: 'confirmed') }
   scope :history, -> { where.not(status: 'confirmed') }
 
