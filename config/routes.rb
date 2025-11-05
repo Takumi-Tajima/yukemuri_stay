@@ -18,6 +18,7 @@ Rails.application.routes.draw do
     resources :upcoming_reservations, only: %i[index show] do
       resource :cancellation_status, only: %i[update], module: :upcoming_reservations
     end
+    resources :past_reservations, only: %i[index show]
   end
 
   namespace :administrators do

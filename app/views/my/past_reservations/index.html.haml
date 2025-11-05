@@ -1,0 +1,26 @@
+%h1.fs-2.mb-4 予約一覧
+
+.nav.nav-tabs.mb-4
+  = link_to '今後の予約', my_upcoming_reservations_path, class: 'nav-link'
+  = link_to '過去の予約', my_past_reservations_path, class: 'nav-link active'
+
+- if @reservations.any?
+  .table-responsive
+    %table.table.table-striped
+      %thead
+        %tr
+          %th= Reservation.human_attribute_name(:check_in_date)
+          %th= Accommodation.human_attribute_name(:name)
+          %th= Reservation.human_attribute_name(:nights)
+          %th= Reservation.human_attribute_name(:total_amount)
+          %th= Reservation.human_attribute_name(:status)
+      %tbody
+        - @reservations.each do |reservation|
+          %tr
+            %td= link_to l(reservation.check_in_date), my_past_reservation_path(reservation)
+            %td= reservation.room_type.accommodation.name
+            %td= "#{reservation.nights}泊"
+            %td= number_to_currency(reservation.total_amount)
+            %td= reservation.status_text
+- else
+  %p.text-muted 予約はありません。

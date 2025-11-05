@@ -28,6 +28,8 @@ class Reservation < ApplicationRecord
   after_create :decrease_remaining_rooms!
 
   scope :default_order, -> { order(:check_in_date) }
+  scope :upcoming, -> { where(status: 'confirmed') }
+  scope :history, -> { where.not(status: 'confirmed') }
 
   # TODO: リファクタ
   # エラーハンドリング方法について
