@@ -13,6 +13,7 @@ class Reservation < ApplicationRecord
 
   belongs_to :user
   belongs_to :room_type
+  has_one :review, dependent: :destroy
 
   validates :check_in_date, presence: true
   validates :nights, numericality: { only_integer: true, in: MIN_NIGHTS..MAX_NIGHTS }
@@ -68,6 +69,10 @@ class Reservation < ApplicationRecord
       update!(status: 'cancelled')
       increase_room_availabilities!
     end
+  end
+
+  def reviewable?
+    review.blank? && checked_out?
   end
 
   private
