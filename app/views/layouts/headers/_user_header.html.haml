@@ -1,9 +1,11 @@
 .navbar.bg-success-subtle
   .container-fluid
     .d-flex.align-items-center
-      .navbar-brand.fs-2= link_to 'Yukemuri Stay', root_path, class: 'text-decoration-none text-dark'
+      .navbar-brand.fs-2= link_to 'Yukemuri Stay', root_path, class: 'text-decoration-none text-body'
     %ul.navbar-nav.ms-auto
       - if user_signed_in?
-        = button_to t('general.logout'), destroy_user_session_path, method: :delete, data: { turbo_confirm: t('confirm.log_out') } ,class: 'btn btn-outline-danger'
+        %li.nav-item.d-flex.align-items-center
+          .me-3=link_to t('reservation.index'), my_reservations_path, class: 'text-decoration-none text-body'
+          = button_to t('general.logout'), destroy_user_session_path, method: :delete, data: { turbo_confirm: t('confirm.log_out') } ,class: 'btn btn-outline-danger'
       - else
         = link_to t('general.login'), new_user_session_path, class: 'btn btn-primary'

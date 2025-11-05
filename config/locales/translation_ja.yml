@@ -36,9 +36,11 @@ ja:
         total_amount: 合計金額
         status: 予約状況
   reservation:
+    index: 予約一覧
     new: 予約へ進む
     confirm: 予約を確認する
     create: 予約を確定する
+    check_out_date: チェックアウト日
   general:
     create: 新規登録
     edit: 編集
@@ -65,10 +67,10 @@ ja:
         inn : 旅館
         guest_house: ゲストハウス
     reservation:
-        status:
-          reserved: 予約済み
-          checked_out: 宿泊済み
-          cancelled: キャンセル済み
+      status:
+        confirmed: 予約済み
+        checked_out: 宿泊済み
+        cancelled: キャンセル済み
   errors:
     messages:
       validate_check_in_date_range: は翌日以降90日後までの間で指定してください

@@ -27,6 +27,8 @@ class Reservation < ApplicationRecord
   # TODO: もしかしてテーブル名を変えた方が良い説
   after_create :decrease_remaining_rooms!
 
+  scope :default_order, -> { order(:check_in_date) }
+
   # TODO: リファクタ
   # エラーハンドリング方法について
   # エラーメッセージについて

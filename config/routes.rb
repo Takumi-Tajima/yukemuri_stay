@@ -14,6 +14,10 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :my do
+    resources :reservations, only: %i[index show]
+  end
+
   namespace :administrators do
     root 'accommodations#index'
     resources :accommodations, only: %i[index show new edit create update destroy] do

@@ -9,8 +9,7 @@ class Accommodations::RoomTypes::ReservationsController < Accommodations::RoomTy
     @reservation.calculate_total_amount
 
     if @reservation.save
-      # TODO: ユーザーのマイページへ遷移をさせる
-      redirect_to root_path, notice: t('controllers.created')
+      redirect_to my_reservations_path, notice: t('controllers.created')
     else
       render :new, status: :unprocessable_content
     end
