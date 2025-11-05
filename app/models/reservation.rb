@@ -3,6 +3,7 @@ class Reservation < ApplicationRecord
   MAX_CHECK_IN_DAYS_FROM_NOW = 90
   MIN_NIGHTS = 1
   MAX_NIGHTS = 5
+  NIGHT_RANGE = MIN_NIGHTS..MAX_NIGHTS
   RESERVATION_STATUSES = %w[confirmed checked_out cancelled].freeze
 
   extend Enumerize
@@ -16,7 +17,7 @@ class Reservation < ApplicationRecord
   has_one :review, dependent: :destroy
 
   validates :check_in_date, presence: true
-  validates :nights, numericality: { only_integer: true, in: MIN_NIGHTS..MAX_NIGHTS }
+  validates :nights, numericality: { only_integer: true, in: NIGHT_RANGE }
   validates :adults, numericality: { only_integer: true, greater_than: 0 }
   validates :children, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :total_amount, numericality: { only_integer: true, greater_than: 0 }
@@ -25,26 +26,14 @@ class Reservation < ApplicationRecord
   validate :validate_guest_count_within_capacity, on: :create
   validate :validate_room_availability, on: :create
 
-  # TODO: もしかしてテーブル名を変えた方が良い説
   after_create :decrease_remaining_rooms!
 
   scope :default_order, -> { order(:check_in_date, :id) }
   scope :upcoming, -> { where(status: 'confirmed') }
   scope :history, -> { where.not(status: 'confirmed') }
 
-  # TODO: リファクタ
-  # エラーハンドリング方法について
-  # エラーメッセージについて
   def calculate_total_amount
-    calculate_total_amount!
-    true
-  rescue ArgumentError
-    errors.add(:base, :calculation_failed)
-    false
-  end
-
-  def calculate_total_amount!
-    validate_calculation_dependencies!
+    return if nights.blank? || adults.blank? || children.blank? || room_type.blank?
 
     base_price = BigDecimal(room_type.base_price.to_s)
     night_count = BigDecimal(nights.to_s)
@@ -77,14 +66,6 @@ class Reservation < ApplicationRecord
 
   private
 
-  # TODO: リファクタする
-  def validate_calculation_dependencies!
-    raise ArgumentError, 'room_type is required' if room_type.blank?
-    raise ArgumentError, 'nights is required' if nights.blank?
-    raise ArgumentError, 'adults is required' if adults.blank?
-    raise ArgumentError, 'children is required' if children.blank?
-  end
-
   def validate_check_in_date_range
     return if check_in_date.blank?
 
@@ -106,15 +87,14 @@ class Reservation < ApplicationRecord
     end
   end
 
-  # TODO: リファクタ
+  def stay_dates
+    @stay_dates ||= (check_in_date...(check_in_date + nights.days)).to_a
+  end
+
   def validate_room_availability
     return if check_in_date.blank? || nights.blank? || room_type.blank?
 
-    stay_dates = (check_in_date...(check_in_date + nights.days)).to_a
-
-    availabilities = room_type.room_availabilities
-                              .where(date: stay_dates)
-                              .index_by(&:date)
+    availabilities = room_type.room_availabilities.where(date: stay_dates).index_by(&:date)
 
     stay_dates.each do |date|
       availability = availabilities[date]
@@ -126,11 +106,7 @@ class Reservation < ApplicationRecord
     end
   end
 
-  # TODO: 確認
-  # 共通化できそうな部分が多いけど、これはこれで良いのか？共通化するとかえって複雑になるし、命名も難しい気が
   def decrease_remaining_rooms!
-    stay_dates = (check_in_date...(check_in_date + nights.days)).to_a
-
     stay_dates.each do |date|
       availability = room_type.room_availabilities.lock.find_by!(date: date)
       availability.decrement_remaining_rooms!
@@ -138,8 +114,6 @@ class Reservation < ApplicationRecord
   end
 
   def increase_room_availabilities!
-    stay_dates = (check_in_date...(check_in_date + nights.days)).to_a
-
     stay_dates.each do |date|
       availability = room_type.room_availabilities.lock.find_by!(date: date)
       availability.increment_remaining_rooms!
