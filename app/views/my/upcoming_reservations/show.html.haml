@@ -51,6 +51,6 @@
           .col-8= @reservation.status_text
 
     - if @reservation.cancellable?
-      .mt-4= button_to t('general.cancel'), my_reservation_cancellation_status_path(@reservation),
+      .mt-4= button_to t('general.cancel'), my_upcoming_reservation_cancellation_status_path(@reservation),
                                             data: { turbo_confirm: '本当にキャンセルしますか？' },
                                             method: :patch, class: 'btn btn-danger'

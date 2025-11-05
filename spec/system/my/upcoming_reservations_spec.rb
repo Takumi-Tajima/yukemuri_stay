@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'マイページ予約の機能', type: :system do
+RSpec.describe 'マイページ今後の予約の機能', type: :system do
   let(:user) { create(:user) }
 
   before { sign_in user }
@@ -15,7 +15,7 @@ RSpec.describe 'マイページ予約の機能', type: :system do
     end
 
     it 'データが表示されること' do
-      visit my_reservations_path
+      visit my_upcoming_reservations_path
 
       expect(page).to have_content '予約一覧'
       expect(page).to have_content '2025/12/15'
@@ -48,13 +48,13 @@ RSpec.describe 'マイページ予約の機能', type: :system do
         create(:room_availability, room_type:, date: check_in_date, remaining_rooms: 5)
         reservation = create(:reservation, user:, room_type:, check_in_date:, nights: 1, adults: 1, children: 0, status: 'confirmed')
 
-        visit my_reservation_path(reservation)
+        visit my_upcoming_reservation_path(reservation)
 
         expect(page).to have_content '予約詳細'
 
         click_button 'キャンセル'
 
-        expect(page).to have_current_path(my_reservations_path)
+        expect(page).to have_current_path(my_upcoming_reservations_path)
         expect(page).to have_content '更新しました'
         expect(reservation.reload.status).to eq('cancelled')
       end
@@ -66,7 +66,7 @@ RSpec.describe 'マイページ予約の機能', type: :system do
         create(:room_availability, room_type:, date: check_in_date, remaining_rooms: 5)
         reservation = create(:reservation, user:, room_type:, check_in_date:, nights: 1, adults: 1, children: 0, status: 'confirmed')
 
-        visit my_reservation_path(reservation)
+        visit my_upcoming_reservation_path(reservation)
 
         expect(page).to have_content '予約詳細'
         expect(page).not_to have_button 'キャンセル'

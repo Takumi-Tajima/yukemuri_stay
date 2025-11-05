@@ -5,7 +5,7 @@
     %ul.navbar-nav.ms-auto
       - if user_signed_in?
         %li.nav-item.d-flex.align-items-center
-          .me-3=link_to t('reservation.index'), my_reservations_path, class: 'text-decoration-none text-body'
+          .me-3=link_to t('reservation.index'), my_upcoming_reservations_path, class: 'text-decoration-none text-body'
           = button_to t('general.logout'), destroy_user_session_path, method: :delete, data: { turbo_confirm: t('confirm.log_out') } ,class: 'btn btn-outline-danger'
       - else
         = link_to t('general.login'), new_user_session_path, class: 'btn btn-primary'
