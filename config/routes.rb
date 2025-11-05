@@ -25,6 +25,7 @@ Rails.application.routes.draw do
         resources :room_availabilities, only: %i[new edit create update], module: :room_types
       end
     end
+    resources :reservations, only: %i[index show edit update]
   end
 
   mount LetterOpenerWeb::Engine, at: '/letter_opener' if Rails.env.development?

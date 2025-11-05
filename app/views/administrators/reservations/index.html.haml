@@ -1,0 +1,20 @@
+%h1.fs-2.mb-3 ユーザーの予約一覧
+
+%table.table
+  %thead
+    %tr
+      %th= Accommodation.human_attribute_name(:name)
+      %th= Reservation.human_attribute_name(:check_in_date)
+      %th= User.human_attribute_name(:email)
+      %th= Reservation.human_attribute_name(:check_in_date)
+      %th= Reservation.human_attribute_name(:nights)
+      %th= Reservation.human_attribute_name(:status)
+  %tbody
+    - @reservations.each do |reservation|
+      %tr
+        %td= link_to reservation.room_type.accommodation.name, administrators_reservation_path(reservation)
+        %td= l(reservation.check_in_date)
+        %td= reservation.user.email
+        %td= l(reservation.check_in_date)
+        %td #{reservation.nights}泊
+        %td= reservation.status_text

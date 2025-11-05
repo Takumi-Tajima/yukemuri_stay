@@ -20,9 +20,9 @@ class Reservation < ApplicationRecord
   validates :children, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :total_amount, numericality: { only_integer: true, greater_than: 0 }
   validates :status, presence: true
-  validate :validate_check_in_date_range
-  validate :validate_guest_count_within_capacity
-  validate :validate_room_availability
+  validate :validate_check_in_date_range, on: :create
+  validate :validate_guest_count_within_capacity, on: :create
+  validate :validate_room_availability, on: :create
 
   # TODO: もしかしてテーブル名を変えた方が良い説
   after_create :decrease_remaining_rooms!
