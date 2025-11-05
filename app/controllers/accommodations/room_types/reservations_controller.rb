@@ -6,6 +6,7 @@ class Accommodations::RoomTypes::ReservationsController < Accommodations::RoomTy
   def create
     @reservation = current_user.reservations.build(reservation_params)
     @reservation.room_type = @room_type
+    @reservation.calculate_total_amount
 
     if @reservation.save
       # TODO: ユーザーのマイページへ遷移をさせる
@@ -18,6 +19,7 @@ class Accommodations::RoomTypes::ReservationsController < Accommodations::RoomTy
   def confirm
     @reservation = current_user.reservations.build(reservation_params)
     @reservation.room_type = @room_type
+    @reservation.calculate_total_amount
 
     # TODO: ここの説明できるようにしておくこと
     if @reservation.valid?

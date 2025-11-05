@@ -26,18 +26,20 @@ class Reservation < ApplicationRecord
   # 別のコールバックを利用する方法→before_saveにするとif文でroom_typeやnightsが存在するかを検証しないといけなくなる。
   after_validation :set_and_calculate_total_amount
 
-  private
-
-  def validate_check_in_date_range
-    min_date = Date.current + MIN_CHECK_IN_DAYS_FROM_NOW.days
-    max_date = Date.current + MAX_CHECK_IN_DAYS_FROM_NOW.days
-
-    unless check_in_date.between?(min_date, max_date)
-      errors.add(:check_in_date, :validate_check_in_date_range)
-    end
+  # TODO: リファクタ
+  # エラーハンドリング方法について
+  # エラーメッセージについて
+  def calculate_total_amount
+    calculate_total_amount!
+    true
+  rescue ArgumentError
+    errors.add(:base, :calculation_failed)
+    false
   end
 
-  def set_and_calculate_total_amount
+  def calculate_total_amount!
+    validate_calculation_dependencies!
+
     base_price = BigDecimal(room_type.base_price.to_s)
     night_count = BigDecimal(nights.to_s)
     adult_count = BigDecimal(adults.to_s)
@@ -48,5 +50,14 @@ class Reservation < ApplicationRecord
     subtotal = adult_amount + child_amount
 
     self.total_amount = Tax.calculate_with_tax(subtotal).to_i
+  end
+
+  private
+
+  def validate_calculation_dependencies!
+    raise ArgumentError, 'room_type is required' if room_type.blank?
+    raise ArgumentError, 'nights is required' if nights.blank?
+    raise ArgumentError, 'adults is required' if adults.blank?
+    raise ArgumentError, 'children is required' if children.blank?
   end
 end
