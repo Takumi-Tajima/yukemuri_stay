@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     resources :room_types, only: %i[show], module: :accommodations do
       resources :reservations, only: %i[new create], module: :room_types do
         collection do
-          post 'confirm'
+          match 'confirm', via: %i[get post]
         end
       end
     end

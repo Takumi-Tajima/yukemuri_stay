@@ -16,11 +16,14 @@ class Accommodations::RoomTypes::ReservationsController < Accommodations::RoomTy
   end
 
   def confirm
+    if request.get?
+      return redirect_to new_accommodation_room_type_reservation_path(@accommodation, @room_type)
+    end
+
     @reservation = current_user.reservations.build(reservation_params)
     @reservation.room_type = @room_type
     @reservation.calculate_total_amount
 
-    # TODO: ここの説明できるようにしておくこと
     if @reservation.valid?
       render :confirm
     else
