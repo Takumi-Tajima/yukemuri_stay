@@ -1,4 +1,6 @@
 class Reservation < ApplicationRecord
+  MIN_CHECK_IN_DAYS_FROM_NOW = 1
+  MAX_CHECK_IN_DAYS_FROM_NOW = 90
   RESERVATION_STATUSES = %w[confirmed checked_out cancelled].freeze
 
   extend Enumerize
@@ -17,6 +19,7 @@ class Reservation < ApplicationRecord
   # TODO: after_validationのためバリデーションをコメントアウトしている。21行目の問題が解決次第修正をすること。
   # validates :total_amount, numericality: { only_integer: true, greater_than: 0 }
   validates :status, presence: true
+  validate :validate_check_in_date_range
 
   # TODO: バリデーションエラー時にも計算処理が走ってしまうので改善をするか、理由を考えること
   # コントローラから直呼びにする方法→呼び忘れ時にvalidates :total_amountで気づけるので問題ないが、正直冗長だよね
@@ -24,6 +27,15 @@ class Reservation < ApplicationRecord
   after_validation :set_and_calculate_total_amount
 
   private
+
+  def validate_check_in_date_range
+    min_date = Date.current + MIN_CHECK_IN_DAYS_FROM_NOW.days
+    max_date = Date.current + MAX_CHECK_IN_DAYS_FROM_NOW.days
+
+    unless check_in_date.between?(min_date, max_date)
+      errors.add(:check_in_date, :validate_check_in_date_range)
+    end
+  end
 
   def set_and_calculate_total_amount
     base_price = BigDecimal(room_type.base_price.to_s)

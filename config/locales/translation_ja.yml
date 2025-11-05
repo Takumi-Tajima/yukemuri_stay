@@ -69,3 +69,6 @@ ja:
           reserved: 予約済み
           checked_out: 宿泊済み
           cancelled: キャンセル済み
+  errors:
+    messages:
+      validate_check_in_date_range: は翌日以降90日後までの間で指定してください
