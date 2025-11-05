@@ -7,7 +7,7 @@ class Review < ApplicationRecord
   belongs_to :user
 
   validates :reservation_id, uniqueness: { scope: :user_id }
-  validates :rating, inclusion: { in: RATING_RANGE }
+  validates :rating, numericality: { only_integer: true, in: RATING_RANGE }
   validates :comment, presence: true
   validate :validate_reservation_is_checked_out
 
