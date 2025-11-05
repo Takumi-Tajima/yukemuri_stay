@@ -26,7 +26,15 @@ class Reservation < ApplicationRecord
   private
 
   def set_and_calculate_total_amount
-    number_of_people = adults + children
-    self.total_amount = room_type.base_price * nights * number_of_people
+    base_price = BigDecimal(room_type.base_price.to_s)
+    night_count = BigDecimal(nights.to_s)
+    adult_count = BigDecimal(adults.to_s)
+    child_count = BigDecimal(children.to_s)
+
+    adult_amount = base_price * night_count * adult_count
+    child_amount = GuestRate.calculate_child_price(base_price) * night_count * child_count
+    subtotal = adult_amount + child_amount
+
+    self.total_amount = Tax.calculate_with_tax(subtotal).to_i
   end
 end
