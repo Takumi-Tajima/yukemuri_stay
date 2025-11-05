@@ -1,0 +1,20 @@
+.row
+  .col-md-8.mx-auto
+    .card.mb-5
+      .card-body
+        .fs-4.card-title= @room_type.name
+        .row.mb-2
+          .col-4
+            %strong= RoomType.human_attribute_name(:capacity)
+          .col-8 #{@room_type.capacity}名
+        .row.mb-2
+          .col-4
+            %strong= RoomType.human_attribute_name(:base_price)
+          .col-8= number_to_currency(@room_type.base_price)
+
+    = simple_form_for(@reservation, url: confirm_accommodation_room_type_reservations_path(@accommodation, @room_type), method: :post, data: { turbo: false }) do |f|
+      = f.input :check_in_date, as: :date, html5: true
+      = f.input :nights
+      = f.input :adults
+      = f.input :children
+      = f.button :submit, t('reservation.confirm'), class: 'btn-primary'

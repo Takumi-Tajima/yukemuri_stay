@@ -5,11 +5,13 @@ Rails.application.routes.draw do
   root 'accommodations#index'
 
   resources :accommodations, only: %i[index show] do
-    resources :room_types, only: %i[show], module: :accommodations
-  end
-
-  namespace :users do
-    resources :home, only: %i[index]
+    resources :room_types, only: %i[show], module: :accommodations do
+      resources :reservations, only: %i[new create], module: :room_types do
+        collection do
+          post 'confirm'
+        end
+      end
+    end
   end
 
   namespace :administrators do

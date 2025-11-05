@@ -16,3 +16,6 @@
             .card-text
               %strong= RoomType.human_attribute_name(:description)
               = @room_type.description
+
+    .text-end.mt-4= link_to '予約へ進む', new_accommodation_room_type_reservation_path(@accommodation, @room_type),
+                            class: 'btn btn-primary'

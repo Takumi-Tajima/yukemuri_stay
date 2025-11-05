@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_03_094104) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_04_055353) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -72,6 +72,21 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_094104) do
     t.index ["email"], name: "index_administrators_on_email", unique: true
   end
 
+  create_table "reservations", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "room_type_id", null: false
+    t.date "check_in_date", null: false
+    t.integer "nights", null: false
+    t.integer "adults", null: false
+    t.integer "children", null: false
+    t.integer "total_amount", null: false
+    t.string "status", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["room_type_id"], name: "index_reservations_on_room_type_id"
+    t.index ["user_id"], name: "index_reservations_on_user_id"
+  end
+
   create_table "room_availabilities", force: :cascade do |t|
     t.bigint "room_type_id", null: false
     t.date "date", null: false
@@ -117,6 +132,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_03_094104) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "reservations", "room_types"
+  add_foreign_key "reservations", "users"
   add_foreign_key "room_availabilities", "room_types"
   add_foreign_key "room_types", "accommodations"
 end

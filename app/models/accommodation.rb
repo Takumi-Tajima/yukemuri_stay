@@ -3,7 +3,7 @@ class Accommodation < ApplicationRecord
 
   extend Enumerize
 
-  enumerize :accommodation_type, in: ACCOMMODATION_TYPE, scope: true
+  enumerize :accommodation_type, in: ACCOMMODATION_TYPE
   enumerize :prefecture, in: Prefecture::ALL
 
   has_many :room_types, dependent: :destroy

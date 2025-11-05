@@ -1,0 +1,50 @@
+.row
+  .col-md-8.mx-auto
+    %h1 予約内容確認
+
+    .card.mb-3
+      .card-body
+        %h5.card-title= @room_type.name
+
+        .row.mb-2
+          .col-4
+            %strong= Reservation.human_attribute_name(:check_in_date)
+          .col-8
+            = l(@reservation.check_in_date)
+
+        .row.mb-2
+          .col-4
+            %strong チェックアウト日
+          .col-8
+            = l(@reservation.check_in_date + @reservation.nights.days)
+
+        .row.mb-2
+          .col-4
+            %strong= Reservation.human_attribute_name(:nights)
+          .col-8
+            = "#{@reservation.nights}泊"
+
+        .row.mb-2
+          .col-4
+            %strong= Reservation.human_attribute_name(:adults)
+          .col-8
+            = "#{@reservation.adults}名"
+
+        .row.mb-2
+          .col-4
+            %strong= Reservation.human_attribute_name(:children)
+          .col-8
+            = "#{@reservation.children}名"
+
+        .row.mb-2
+          .col-4
+            %strong= Reservation.human_attribute_name(:total_amount)
+          .col-8
+            = number_to_currency(@reservation.total_amount)
+
+    = simple_form_for(@reservation, url: accommodation_room_type_reservations_path(@accommodation, @room_type), method: :post) do |f|
+      = f.hidden_field :check_in_date
+      = f.hidden_field :nights
+      = f.hidden_field :adults
+      = f.hidden_field :children
+      = f.button :submit, t('reservation.create'), class: 'btn-primary'

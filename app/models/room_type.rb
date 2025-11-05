@@ -1,6 +1,7 @@
 class RoomType < ApplicationRecord
   belongs_to :accommodation
   has_many :room_availabilities, dependent: :destroy
+  has_many :reservations, dependent: :destroy
 
   has_one_attached :main_image do |attachable|
     attachable.variant :display, resize_to_limit: ImageSettings::MAIN_IMAGE[:display_size]

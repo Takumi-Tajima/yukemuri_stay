@@ -28,6 +28,17 @@ ja:
         room_type: 部屋タイプ
         date: 日付
         remaining_rooms: 空き部屋数
+      reservation:
+        check_in_date: チェックイン日
+        nights: 宿泊数
+        adults: 大人人数
+        children: 子供人数
+        total_amount: 合計金額
+        status: 予約状況
+  reservation:
+    new: 予約へ進む
+    confirm: 予約を確認する
+    create: 予約を確定する
   general:
     create: 新規登録
     edit: 編集
@@ -53,3 +64,8 @@ ja:
         hotel: ホテル
         inn : 旅館
         guest_house: ゲストハウス
+    reservation:
+        status:
+          reserved: 予約済み
+          checked_out: 宿泊済み
+          cancelled: キャンセル済み
