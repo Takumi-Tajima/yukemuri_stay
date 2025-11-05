@@ -15,7 +15,9 @@ Rails.application.routes.draw do
   end
 
   namespace :my do
-    resources :reservations, only: %i[index show]
+    resources :reservations, only: %i[index show] do
+      resource :cancellation_status, only: %i[update], module: :reservations
+    end
   end
 
   namespace :administrators do

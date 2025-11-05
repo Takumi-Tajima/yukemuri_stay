@@ -194,4 +194,68 @@ RSpec.describe Reservation, type: :model do
       end
     end
   end
+
+  describe 'キャンセル機能' do
+    let(:user) { create(:user) }
+    let(:accommodation) { create(:accommodation) }
+    let(:room_type) { create(:room_type, accommodation:, capacity: 5) }
+
+    describe '#cancellable?' do
+      context 'confirmed状態でチェックイン日が2日後の場合' do
+        it 'キャンセル可能であること' do
+          check_in_date = Date.current + 2.days
+          create(:room_availability, room_type:, date: check_in_date, remaining_rooms: 5)
+          reservation = create(:reservation, user:, room_type:, check_in_date:, nights: 1, adults: 1, children: 0, status: 'confirmed')
+
+          expect(reservation.cancellable?).to be true
+        end
+      end
+
+      context 'confirmed状態でチェックイン日が翌日の場合' do
+        it 'キャンセル不可であること' do
+          check_in_date = Date.current + 1.day
+          create(:room_availability, room_type:, date: check_in_date, remaining_rooms: 5)
+          reservation = create(:reservation, user:, room_type:, check_in_date:, nights: 1, adults: 1, children: 0, status: 'confirmed')
+
+          expect(reservation.cancellable?).to be false
+        end
+      end
+
+      context 'cancelled状態の場合' do
+        it 'キャンセル不可であること' do
+          check_in_date = Date.current + 3.days
+          create(:room_availability, room_type:, date: check_in_date, remaining_rooms: 5)
+          reservation = create(:reservation, user:, room_type:, check_in_date:, nights: 1, adults: 1, children: 0, status: 'cancelled')
+
+          expect(reservation.cancellable?).to be false
+        end
+      end
+    end
+
+    describe '#cancel!' do
+      context 'キャンセル可能な場合' do
+        it 'statusがcancelledになり、空き部屋数が1増えること' do
+          check_in_date = Date.current + 3.days
+          availability = create(:room_availability, room_type:, date: check_in_date, remaining_rooms: 5)
+          reservation = create(:reservation, user:, room_type:, check_in_date:, nights: 1, adults: 1, children: 0, status: 'confirmed')
+
+          availability.reload
+
+          expect { reservation.cancel! }.to change { reservation.reload.status }.to('cancelled')
+          expect(availability.reload.remaining_rooms).to eq(5)
+        end
+      end
+
+      context 'キャンセル不可な場合' do
+        it '例外が発生すること' do
+          check_in_date = Date.current + 1.day
+          create(:room_availability, room_type:, date: check_in_date, remaining_rooms: 5)
+          reservation = create(:reservation, user:, room_type:, check_in_date:, nights: 1, adults: 1, children: 0, status: 'confirmed')
+
+          # TODO: これで良い？
+          expect { reservation.cancel! }.to raise_error(RuntimeError)
+        end
+      end
+    end
+  end
 end

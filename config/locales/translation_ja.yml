@@ -52,12 +52,14 @@ ja:
     public: 公開
     private: 非公開
     search: 検索
+    cancel: キャンセル
   form:
     select:
       include_blank: 選択なし
   controllers:
     created: 作成しました
     updated: 更新しました
+    can_not_be_updated: 更新できませんでした
     destroyed: 削除しました
   confirm:
     log_out: 本当にログアウトしますか？

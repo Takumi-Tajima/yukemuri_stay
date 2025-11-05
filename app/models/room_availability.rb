@@ -9,4 +9,8 @@ class RoomAvailability < ApplicationRecord
   def decrement_remaining_rooms!
     update!(remaining_rooms: remaining_rooms - 1)
   end
+
+  def increment_remaining_rooms!
+    update!(remaining_rooms: remaining_rooms + 1)
+  end
 end

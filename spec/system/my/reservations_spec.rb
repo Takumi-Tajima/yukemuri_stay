@@ -37,4 +37,40 @@ RSpec.describe 'マイページ予約の機能', type: :system do
       expect(page).to have_content '予約済み'
     end
   end
+
+  describe '予約キャンセル' do
+    let(:accommodation) { create(:accommodation, name: 'ゆけむり温泉', published: true) }
+    let(:room_type) { create(:room_type, accommodation:, name: 'さくらの間', capacity: 10) }
+
+    context 'キャンセル可能な予約の場合' do
+      it 'キャンセルボタンが表示され、キャンセルできること' do
+        check_in_date = Date.current + 3.days
+        create(:room_availability, room_type:, date: check_in_date, remaining_rooms: 5)
+        reservation = create(:reservation, user:, room_type:, check_in_date:, nights: 1, adults: 1, children: 0, status: 'confirmed')
+
+        visit my_reservation_path(reservation)
+
+        expect(page).to have_content '予約詳細'
+
+        click_button 'キャンセル'
+
+        expect(page).to have_current_path(my_reservations_path)
+        expect(page).to have_content '更新しました'
+        expect(reservation.reload.status).to eq('cancelled')
+      end
+    end
+
+    context 'キャンセル不可な予約の場合' do
+      it 'キャンセルボタンが表示されないこと' do
+        check_in_date = Date.current + 1.day
+        create(:room_availability, room_type:, date: check_in_date, remaining_rooms: 5)
+        reservation = create(:reservation, user:, room_type:, check_in_date:, nights: 1, adults: 1, children: 0, status: 'confirmed')
+
+        visit my_reservation_path(reservation)
+
+        expect(page).to have_content '予約詳細'
+        expect(page).not_to have_button 'キャンセル'
+      end
+    end
+  end
 end

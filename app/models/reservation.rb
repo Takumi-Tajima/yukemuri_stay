@@ -7,7 +7,7 @@ class Reservation < ApplicationRecord
 
   extend Enumerize
 
-  enumerize :status, in: RESERVATION_STATUSES
+  enumerize :status, in: RESERVATION_STATUSES, predicates: true
 
   attribute :status, :string, default: 'confirmed'
 
@@ -53,6 +53,19 @@ class Reservation < ApplicationRecord
     subtotal = adult_amount + child_amount
 
     self.total_amount = Tax.calculate_with_tax(subtotal).to_i
+  end
+
+  def cancellable?
+    confirmed? && check_in_date > Date.current + 1.day
+  end
+
+  def cancel!
+    raise unless cancellable?
+
+    transaction do
+      update!(status: 'cancelled')
+      increase_room_availabilities!
+    end
   end
 
   private
@@ -107,12 +120,22 @@ class Reservation < ApplicationRecord
   end
 
   # TODO: 確認
+  # 共通化できそうな部分が多いけど、これはこれで良いのか？共通化するとかえって複雑になるし、命名も難しい気が
   def decrease_remaining_rooms!
     stay_dates = (check_in_date...(check_in_date + nights.days)).to_a
 
     stay_dates.each do |date|
       availability = room_type.room_availabilities.lock.find_by!(date: date)
       availability.decrement_remaining_rooms!
+    end
+  end
+
+  def increase_room_availabilities!
+    stay_dates = (check_in_date...(check_in_date + nights.days)).to_a
+
+    stay_dates.each do |date|
+      availability = room_type.room_availabilities.lock.find_by!(date: date)
+      availability.increment_remaining_rooms!
     end
   end
 end
