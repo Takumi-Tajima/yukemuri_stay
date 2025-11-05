@@ -6,7 +6,7 @@ RSpec.describe 'マイページ今後の予約の機能', type: :system do
   before { sign_in user }
 
   describe '表示機能' do
-    let(:accommodation) { create(:accommodation, name: 'ゆけむり温泉', published: true) }
+    let(:accommodation) { create(:accommodation, name: 'ゆけむり温泉') }
     let(:room_type) { create(:room_type, accommodation:, name: 'さくらの間', capacity: 10) }
 
     before do
@@ -39,7 +39,7 @@ RSpec.describe 'マイページ今後の予約の機能', type: :system do
   end
 
   describe '予約キャンセル' do
-    let(:accommodation) { create(:accommodation, name: 'ゆけむり温泉', published: true) }
+    let(:accommodation) { create(:accommodation, name: 'ゆけむり温泉') }
     let(:room_type) { create(:room_type, accommodation:, name: 'さくらの間', capacity: 10) }
 
     context 'キャンセル可能な予約の場合' do

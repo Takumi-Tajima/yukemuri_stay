@@ -6,7 +6,7 @@ RSpec.describe '空き部屋の機能', type: :system do
   before { sign_in administrator }
 
   describe '表示機能' do
-    let(:accommodation) { create(:accommodation, name: 'ゆけむり温泉', published: true) }
+    let(:accommodation) { create(:accommodation, name: 'ゆけむり温泉') }
     let(:room_type) { create(:room_type, accommodation:, name: 'さくらの間') }
 
     before do
@@ -27,15 +27,15 @@ RSpec.describe '空き部屋の機能', type: :system do
 
       expect(page).to have_content '客室タイプ詳細'
       expect(page).to have_content '空いている部屋の一覧'
-      expect(page).to have_content '2025-12-01'
+      expect(page).to have_content '2025/12/01'
       expect(page).to have_content '5室'
-      expect(page).to have_content '2025-12-02'
+      expect(page).to have_content '2025/12/02'
       expect(page).to have_content '3室'
     end
   end
 
   describe '登録機能' do
-    let(:accommodation) { create(:accommodation, name: 'さくらビジネスホテル', published: true) }
+    let(:accommodation) { create(:accommodation, name: 'さくらビジネスホテル') }
     let!(:room_type) { create(:room_type, accommodation:, name: 'スタンダードツイン') }
 
     it '新規登録ができること' do
@@ -56,7 +56,7 @@ RSpec.describe '空き部屋の機能', type: :system do
 
       expect(page).to have_content '空室情報新規登録'
 
-      fill_in '日付', with: '2025-12-15'
+      fill_in '日付', with: '2025/12/15'
       fill_in '空き部屋数', with: '10'
 
       expect {
@@ -65,13 +65,13 @@ RSpec.describe '空き部屋の機能', type: :system do
       }.to change(room_type.room_availabilities, :count).by(1)
 
       expect(page).to have_content '客室タイプ詳細'
-      expect(page).to have_content '2025-12-15'
+      expect(page).to have_content '2025/12/15'
       expect(page).to have_content '10室'
     end
   end
 
   describe '編集機能' do
-    let(:accommodation) { create(:accommodation, name: 'もみじ旅館', published: true) }
+    let(:accommodation) { create(:accommodation, name: 'もみじ旅館') }
     let(:room_type) { create(:room_type, accommodation:, name: 'もみじの間') }
 
     before do
@@ -92,7 +92,7 @@ RSpec.describe '空き部屋の機能', type: :system do
 
       expect(page).to have_content '客室タイプ詳細'
       expect(page).to have_content '空いている部屋の一覧'
-      expect(page).to have_content '2025-12-20'
+      expect(page).to have_content '2025/12/20'
       expect(page).to have_content '8室'
 
       within 'table' do

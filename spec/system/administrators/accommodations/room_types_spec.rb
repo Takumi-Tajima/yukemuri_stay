@@ -6,7 +6,7 @@ RSpec.describe '部屋タイプの機能', type: :system do
   before { sign_in administrator }
 
   describe '表示機能' do
-    let(:accommodation) { create(:accommodation, name: 'ゆけむり温泉', published: true) }
+    let(:accommodation) { create(:accommodation, name: 'ゆけむり温泉') }
 
     before do
       create(:room_type, accommodation:, name: 'さくらの間', capacity: 10,
@@ -73,7 +73,7 @@ RSpec.describe '部屋タイプの機能', type: :system do
   end
 
   describe '削除機能' do
-    let(:accommodation) { create(:accommodation, name: 'もみじ旅館', published: true) }
+    let(:accommodation) { create(:accommodation, name: 'もみじ旅館') }
     let!(:room_type) { create(:room_type, accommodation:, name: 'もみじの間', capacity: 10) }
 
     it '削除ができること', :js do

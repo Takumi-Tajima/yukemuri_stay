@@ -6,6 +6,6 @@ FactoryBot.define do
     phone_number { Faker::PhoneNumber.phone_number }
     accommodation_type { Accommodation::ACCOMMODATION_TYPE.sample }
     description { Faker::Lorem.sentence }
-    published { false }
+    published { true }
   end
 end

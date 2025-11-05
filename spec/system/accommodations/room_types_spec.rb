@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe '部屋タイプの機能', type: :system do
   describe '表示機能' do
-    let(:accommodation) { create(:accommodation, name: 'ゆけむり温泉', published: true) }
+    let(:accommodation) { create(:accommodation, name: 'ゆけむり温泉') }
 
     before do
       create(:room_type, accommodation:, name: 'さくらの間', capacity: 10,
