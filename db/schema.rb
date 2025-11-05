@@ -87,6 +87,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_04_055353) do
     t.index ["user_id"], name: "index_reservations_on_user_id"
   end
 
+  create_table "reviews", force: :cascade do |t|
+    t.bigint "reservation_id", null: false
+    t.bigint "user_id", null: false
+    t.integer "rating", null: false
+    t.text "comment", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["reservation_id", "user_id"], name: "index_reviews_on_reservation_id_and_user_id", unique: true
+    t.index ["user_id"], name: "index_reviews_on_user_id"
+  end
+
   create_table "room_availabilities", force: :cascade do |t|
     t.bigint "room_type_id", null: false
     t.date "date", null: false

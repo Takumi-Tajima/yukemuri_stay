@@ -1,0 +1,18 @@
+.row
+  .col-md-8.mx-auto
+    %h1.fs-2.mb-4 レビューを投稿
+    .card.mb-4
+      .card-body
+        .fs-4.card-title.mb-3= @reservation.room_type.accommodation.name
+
+        .row.mb-2
+          .col-4
+            %strong= RoomType.human_attribute_name(:name)
+          .col-8= @reservation.room_type.name
+
+    .card
+      .card-body
+        = simple_form_for(@review, url: my_past_reservation_review_path(@reservation), method: :post) do |f|
+          = f.input :rating, collection: Review::RATING_RANGE
+          = f.input :comment, as: :text, input_html: { rows: 5 }
+          = f.button :submit, class: 'btn-primary'

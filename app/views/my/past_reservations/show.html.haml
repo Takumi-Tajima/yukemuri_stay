@@ -49,3 +49,6 @@
           .col-4
             %strong= Reservation.human_attribute_name(:status)
           .col-8= @reservation.status_text
+
+    - if @reservation.reviewable?
+      .mt-4= link_to t('review.new'), new_my_past_reservation_review_path(@reservation), class: 'btn btn-primary'
