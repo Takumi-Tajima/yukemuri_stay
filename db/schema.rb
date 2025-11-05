@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_04_055353) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_05_204135) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -115,6 +115,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_04_055353) do
     t.text "description", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "position"
     t.index ["accommodation_id", "name"], name: "index_room_types_on_accommodation_id_and_name", unique: true
   end
 
@@ -145,6 +146,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_04_055353) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "reservations", "room_types"
   add_foreign_key "reservations", "users"
+  add_foreign_key "reviews", "reservations"
+  add_foreign_key "reviews", "users"
   add_foreign_key "room_availabilities", "room_types"
   add_foreign_key "room_types", "accommodations"
 end
