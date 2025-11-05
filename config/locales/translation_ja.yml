@@ -41,6 +41,8 @@ ja:
     confirm: 予約を確認する
     create: 予約を確定する
     check_out_date: チェックアウト日
+    room:
+      restrict_with_exception: 予約されている部屋タイプがあるため削除できません
   general:
     create: 新規登録
     edit: 編集

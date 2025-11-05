@@ -36,6 +36,8 @@ class Administrators::AccommodationsController < Administrators::ApplicationCont
   def destroy
     @accommodation.destroy!
     redirect_to administrators_accommodations_path, notice: t('controllers.destroyed'), status: :see_other
+  rescue ActiveRecord::DeleteRestrictionError
+    redirect_to administrators_accommodation_path(@accommodation), alert: t('reservation.room.restrict_with_exception'), status: :see_other
   end
 
   private
