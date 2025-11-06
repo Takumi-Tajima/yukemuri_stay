@@ -1,3 +1,4 @@
 ## ER図
 
-<img width="1174" height="673" alt="image" src="https://github.com/user-attachments/assets/f9204722-2061-4830-98a7-0b961cafc446" />
+<img width="1276" height="853" alt="image" src="https://github.com/user-attachments/assets/7f75a9f8-1246-48f0-82c1-4d084517f6ee" />
+
