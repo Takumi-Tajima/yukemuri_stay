@@ -3,29 +3,29 @@
 .card
   .card-body
     %dl.row
-      %dt.col-sm-3= User.human_attribute_name(:id)
-      %dd.col-sm-9= @user.id
+      %dt.col-3= User.human_attribute_name(:id)
+      %dd.col-9= @user.id
 
-      %dt.col-sm-3= User.human_attribute_name(:name)
-      %dd.col-sm-9= @user.name
+      %dt.col-3= User.human_attribute_name(:name)
+      %dd.col-9= @user.name
 
-      %dt.col-sm-3= User.human_attribute_name(:email)
-      %dd.col-sm-9= @user.email
+      %dt.col-3= User.human_attribute_name(:email)
+      %dd.col-9= @user.email
 
-      %dt.col-sm-3= User.human_attribute_name(:sign_in_count)
-      %dd.col-sm-9= @user.sign_in_count
+      %dt.col-3= User.human_attribute_name(:sign_in_count)
+      %dd.col-9= @user.sign_in_count
 
-      %dt.col-sm-3= User.human_attribute_name(:current_sign_in_at)
-      %dd.col-sm-9= @user.current_sign_in_at ? l(@user.current_sign_in_at) : '-'
+      %dt.col-3= User.human_attribute_name(:current_sign_in_at)
+      %dd.col-9= @user.current_sign_in_at ? l(@user.current_sign_in_at) : '-'
 
-      %dt.col-sm-3= User.human_attribute_name(:last_sign_in_at)
-      %dd.col-sm-9= @user.last_sign_in_at ? l(@user.last_sign_in_at) : '-'
+      %dt.col-3= User.human_attribute_name(:last_sign_in_at)
+      %dd.col-9= @user.last_sign_in_at ? l(@user.last_sign_in_at) : '-'
 
-      %dt.col-sm-3= User.human_attribute_name(:confirmed_at)
-      %dd.col-sm-9= @user.confirmed_at ? l(@user.confirmed_at) : '-'
+      %dt.col-3= User.human_attribute_name(:confirmed_at)
+      %dd.col-9= @user.confirmed_at ? l(@user.confirmed_at) : '-'
 
-      %dt.col-sm-3= User.human_attribute_name(:created_at)
-      %dd.col-sm-9= l(@user.created_at)
+      %dt.col-3= User.human_attribute_name(:created_at)
+      %dd.col-9= l(@user.created_at)
 
 .text-end.mt-5
   = button_to t('general.destroy'), administrators_user_path(@user),
